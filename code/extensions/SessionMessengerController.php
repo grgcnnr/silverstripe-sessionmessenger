@@ -58,15 +58,26 @@ class SessionMessengerController extends Extension
     }
 
     /**
-     * Get a flash message that is rendered into a template
+     * The data for the flash message
+     *
+     * @return String
+     */
+    public function getSessionMessageData()
+    {
+        if ($message = Session::get('Site.Message')) {
+            Session::clear('Site.Message');
+            $array = new ArrayData($message);
+            return $array;
+        }
+    }
+    /**
+     * Render the flash message data into a template
      *
      * @return String
      */
     public function getSessionMessage()
     {
-        if ($message = Session::get('Site.Message')) {
-            Session::clear('Site.Message');
-            $array = new ArrayData($message);
+        if ($array = $this->getSessionMessageData()) {
             return $array->renderWith('SessionMessage');
         }
     }
