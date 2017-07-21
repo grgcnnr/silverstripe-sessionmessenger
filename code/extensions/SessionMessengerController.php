@@ -62,11 +62,13 @@ class SessionMessengerController extends Extension
      *
      * @return String
      */
-    public function getSessionMessageData()
+    public function getSessionMessageData($clearSession = false)
     {
         if ($message = Session::get('Site.Message')) {
-            Session::clear('Site.Message');
             $array = new ArrayData($message);
+            if ($clearSession) {
+              Session::clear('Site.Message');
+            }
             return $array;
         }
     }
@@ -78,6 +80,7 @@ class SessionMessengerController extends Extension
     public function getSessionMessage()
     {
         if ($array = $this->getSessionMessageData()) {
+            Session::clear('Site.Message');
             return $array->renderWith('SessionMessage');
         }
     }
